@@ -36,22 +36,57 @@ def to_usd(my_price):
     """
     return f"${my_price:,.2f}" #> $12,000.71
 
+# Program utilizes to_usd function provided by Professor Rossetti for Groceries Exercies
+def to_usd(my_price):
+    """
+    Converts a numeric value to usd-formatted string, for printing and display purposes.
+    
+    Param: my_price (int or float) like 4000.444444
+    
+    Example: to_usd(4000.444444)
+    
+    Returns: $4,000.44
+    """
+    return f"${my_price:,.2f}" 
+
+# Welcome user and provide instructions on how to use the app
+print("Hello, welcome to Green Foods Grocery's cehckout application!")
+print("---------------------------------")
+print("You will be prompted to enter the product identifiers for each product.")
+print("When you are done entering all product identifiers, enter 'DONE'.")
+print("---------------------------------")
+
 # Capture product IDs until user is finished using an infinite while loop
 selected_ids = []
 while True:
-    selected_id = input("Please select / scan a valid product id: ")
+    selected_id = input("Please input a product identifier: ")
     if selected_id.upper() == "DONE":
         break
     else:
+        # Verify that the product ID is valid 
+
+        # If it is valid, append to the selected_ids lsit
         selected_ids.append(selected_id)
+
+        # If it is not valid, print "Are you sure that product identifier is correct? Please try again!" 
+        # and return to beginning of while loop
     print(selected_id)
-print("WE HAVE REACHED THE END OF THE LOOP")
-print(selected_ids)
+
+print("---------------------------------")
+print("GREEN FOODS GROCERY")
+print("WWW.GREEN-FOODS-GROCERY.COM")
+print("---------------------------------")
+print("CHECKOUT AT:")
+print("---------------------------------")
+print("SELECTED PRODUCTS:")
 
 # Perform product lookups to determine what  product's name and price
 for id in selected_ids:
     # Display the selected product's name and price
     matching_products = [p for p in products if str(p["id"]) == str(id)]
     matching_product = matching_products[0]
-    print(matching_product["name"], matching_product["price"])
+    #print("...", matching_product["name"], f"({to_usd(matching_product["price"])}))
+    price = to_usd(matching_product["price"])
+    print("...", matching_product["name"], f"({price})")
 
+print("---------------------------------")
