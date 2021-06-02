@@ -36,6 +36,13 @@ def to_usd(my_price):
     """
     return f"${my_price:,.2f}" #> $12,000.71
 
+# Import os to get tax rate from .env file
+import os
+from dotenv import load_dotenv
+load_dotenv()
+
+# Get tax rate from .env file
+TAX_RATE = os.getenv("TAX_RATE", default="0.0875")
 
 # Capture date and time at beginning of checkout process
 # Code for date and time found on thispointer.com and Stack Overflow for AM/PM (links below)
@@ -98,11 +105,14 @@ for id in selected_ids:
     price = to_usd(matching_product["price"])
     print(" ...", matching_product["name"], f"({price})")
 
-# Print subtotal, tax, and total with tax
+# Print subtotal
 print("---------------------------------")
 subtotal_usd = to_usd(subtotal)
 print("SUBTOTAL:", subtotal_usd)
-tax = subtotal * .0875
+
+# Print tax and total with tax (sum of subtotal and tax) using tax rate specified in .env file
+# Need to convert TAX_RATE from .env file from str to float before performing multiplication with subtotal (an integer)
+tax = subtotal * float(TAX_RATE)
 print("TAX:", to_usd(tax))
 print("TOTAL:", to_usd(subtotal+tax))
 

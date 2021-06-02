@@ -1,0 +1,4 @@
+# This is the requirements.txt file
+
+# The below is required to read contents of the .env file
+python-dotenv
