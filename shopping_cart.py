@@ -43,6 +43,12 @@ from datetime import datetime
 timestamp = datetime.now()
 timestampStr = timestamp.strftime("%b-%d-%Y %I:%M %p")
 
+# Create list of valid IDs against which to compare user input
+# When creating list, covert values from int to str to enable comparison with user input
+valid_ids = []
+for identifier in products:
+    valid_ids.append(str(identifier["id"]))
+
 # Welcome user and provide instructions on how to use the app
 print("Hello, welcome to Green Foods Grocery's cehckout application!")
 print("---------------------------------")
@@ -57,14 +63,15 @@ while True:
     if selected_id.upper() == "DONE":
         break
     else:
-        # Verify that the product ID is valid 
-
-        # If it is valid, append to the selected_ids lsit
-        selected_ids.append(selected_id)
-
+        # Verify that the product ID is valid. If valid, append to the selected_ids list
+        if(selected_id in valid_ids):
+            selected_ids.append(selected_id)
         # If it is not valid, print "Are you sure that product identifier is correct? Please try again!" 
         # and return to beginning of while loop
-    print(selected_id)
+        else:
+            print("Are you sure that product identifier is correct? Please try again!")     
+
+print(selected_ids)
 
 print("---------------------------------")
 print("GREEN FOODS GROCERY")
