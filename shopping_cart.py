@@ -36,9 +36,6 @@ def to_usd(my_price):
     """
     return f"${my_price:,.2f}" #> $12,000.71
 
-#print(products)
-#print(len(products))
-
 # Capture product IDs until user is finished using an infinite while loop
 selected_ids = []
 while True:
