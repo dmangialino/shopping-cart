@@ -76,17 +76,33 @@ print("---------------------------------")
 print("GREEN FOODS GROCERY")
 print("WWW.GREEN-FOODS-GROCERY.COM")
 print("---------------------------------")
+# Print timestamp (date and time) of checkout
 print("CHECKOUT AT:")
 print("---------------------------------")
 print("SELECTED PRODUCTS:")
 
 # Perform product lookups to determine what  product's name and price
+subtotal = 0
 for id in selected_ids:
     # Display the selected product's name and price
     matching_products = [p for p in products if str(p["id"]) == str(id)]
     matching_product = matching_products[0]
     #print("...", matching_product["name"], f"({to_usd(matching_product["price"])}))
+    subtotal += float(matching_product["price"])
     price = to_usd(matching_product["price"])
-    print("...", matching_product["name"], f"({price})")
+    print(" ...", matching_product["name"], f"({price})")
 
+# Print subtotal
+print("---------------------------------")
+subtotal_usd = to_usd(subtotal)
+print("SUBTOTAL:", subtotal_usd)
+
+# Print tax and total with tax
+tax = subtotal * .0875
+print("TAX:", to_usd(tax))
+print("TOTAL:", to_usd(subtotal+tax))
+
+# Display thank you message to user
+print("---------------------------------")
+print("THANKS, SEE YOU AGAIN SOON!")
 print("---------------------------------")
