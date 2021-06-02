@@ -1,7 +1,7 @@
 # shopping-cart
 
 ## Installation
-Clone this repository to your local machine. Then, using the command line, navigate to the root folder of the repository
+Clone this repository to your local machine. Then, using the command line, navigate to the root folder of the repository.
 
 ## Setup
 Use Anaconda to create and activate a new virtual environment, perhaps called "shopping-env"

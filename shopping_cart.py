@@ -36,12 +36,15 @@ def to_usd(my_price):
     """
     return f"${my_price:,.2f}" #> $12,000.71
 
-# Code for date and time found on thispointer.com and Stack Overflow for AM/PM
+
+# Capture date and time at beginning of checkout process
+# Code for date and time found on thispointer.com and Stack Overflow for AM/PM (links below)
 # https://thispointer.com/python-how-to-get-current-date-and-time-or-timestamp/
 # https://stackoverflow.com/questions/1759455/how-can-i-account-for-period-am-pm-using-strftime
 from datetime import datetime
 timestamp = datetime.now()
 timestampStr = timestamp.strftime("%b-%d-%Y %I:%M %p")
+
 
 # Create list of valid IDs against which to compare user input
 # When creating list, covert values from int to str to enable comparison with user input
@@ -49,12 +52,14 @@ valid_ids = []
 for identifier in products:
     valid_ids.append(str(identifier["id"]))
 
+
 # Welcome user and provide instructions on how to use the app
 print("Hello, welcome to Green Foods Grocery's cehckout application!")
 print("---------------------------------")
 print("You will be prompted to enter the product identifiers for each product.")
 print("When you are done entering all product identifiers, enter 'DONE'.")
 print("---------------------------------")
+
 
 # Capture product IDs until user is finished using an infinite while loop
 selected_ids = []
@@ -71,8 +76,8 @@ while True:
         else:
             print("Are you sure that product identifier is correct? Please try again!")     
 
-print(selected_ids)
 
+# Print top portion of receipt, including timestamp (date and time)
 print("---------------------------------")
 print("GREEN FOODS GROCERY")
 print("WWW.GREEN-FOODS-GROCERY.COM")
@@ -82,7 +87,7 @@ print("CHECKOUT AT:", timestampStr)
 print("---------------------------------")
 print("SELECTED PRODUCTS:")
 
-# Perform product lookups to determine what  product's name and price
+# Perform product lookups to determine each product's name and price
 subtotal = 0
 for id in selected_ids:
     # Display the selected product's name and price
@@ -93,17 +98,15 @@ for id in selected_ids:
     price = to_usd(matching_product["price"])
     print(" ...", matching_product["name"], f"({price})")
 
-# Print subtotal
+# Print subtotal, tax, and total with tax
 print("---------------------------------")
 subtotal_usd = to_usd(subtotal)
 print("SUBTOTAL:", subtotal_usd)
-
-# Print tax and total with tax
 tax = subtotal * .0875
 print("TAX:", to_usd(tax))
 print("TOTAL:", to_usd(subtotal+tax))
 
 # Display thank you message to user
 print("---------------------------------")
-print("THANKS, SEE YOU AGAIN SOON!")
+print("THANK YOU! SEE YOU AGAIN SOON!")
 print("---------------------------------")
