@@ -36,7 +36,25 @@ def to_usd(my_price):
     """
     return f"${my_price:,.2f}" #> $12,000.71
 
+#print(products)
+#print(len(products))
 
-# TODO: write some Python code here to produce the desired output
+# Capture product IDs until user is finished using an infinite while loop
+selected_ids = []
+while True:
+    selected_id = input("Please select / scan a valid product id: ")
+    if selected_id.upper() == "DONE":
+        break
+    else:
+        selected_ids.append(selected_id)
+    print(selected_id)
+print("WE HAVE REACHED THE END OF THE LOOP")
+print(selected_ids)
 
-print(products)
+# Perform product lookups to determine what  product's name and price
+for id in selected_ids:
+    # Display the selected product's name and price
+    matching_products = [p for p in products if str(p["id"]) == str(id)]
+    matching_product = matching_products[0]
+    print(matching_product["name"], matching_product["price"])
+
