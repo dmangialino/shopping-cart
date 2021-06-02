@@ -23,7 +23,7 @@ products = [
     {"id":20, "name": "Pomegranate Cranberry & Aloe Vera Enrich Drink", "department": "beverages", "aisle": "juice nectars", "price": 4.25}
 ] # based on data from Instacart: https://www.instacart.com/datasets/grocery-shopping-2017
 
-
+# Program utilizes to_usd function provided by Professor Rossetti to convert values to USD format
 def to_usd(my_price):
     """
     Converts a numeric value to usd-formatted string, for printing and display purposes.
@@ -36,18 +36,12 @@ def to_usd(my_price):
     """
     return f"${my_price:,.2f}" #> $12,000.71
 
-# Program utilizes to_usd function provided by Professor Rossetti for Groceries Exercies
-def to_usd(my_price):
-    """
-    Converts a numeric value to usd-formatted string, for printing and display purposes.
-    
-    Param: my_price (int or float) like 4000.444444
-    
-    Example: to_usd(4000.444444)
-    
-    Returns: $4,000.44
-    """
-    return f"${my_price:,.2f}" 
+# Code for date and time found on thispointer.com and Stack Overflow for AM/PM
+# https://thispointer.com/python-how-to-get-current-date-and-time-or-timestamp/
+# https://stackoverflow.com/questions/1759455/how-can-i-account-for-period-am-pm-using-strftime
+from datetime import datetime
+timestamp = datetime.now()
+timestampStr = timestamp.strftime("%b-%d-%Y %I:%M %p")
 
 # Welcome user and provide instructions on how to use the app
 print("Hello, welcome to Green Foods Grocery's cehckout application!")
@@ -77,7 +71,7 @@ print("GREEN FOODS GROCERY")
 print("WWW.GREEN-FOODS-GROCERY.COM")
 print("---------------------------------")
 # Print timestamp (date and time) of checkout
-print("CHECKOUT AT:")
+print("CHECKOUT AT:", timestampStr)
 print("---------------------------------")
 print("SELECTED PRODUCTS:")
 
