@@ -22,6 +22,6 @@ In the file, copy the below text. Provide the value of the sales tax rate where 
 TAX_RATE = .0875
 
 ## Run the App
-To run the application, run the below command:
+To run the application, run the below command on the command line:
 
 python shopping_cart.py
