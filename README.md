@@ -11,7 +11,7 @@ conda activate shopping-env
 
 After activating the virtual environment, run the below to install packages dependencies (identified in the requirements.txt file):
 
-pip install -r requirements.txt # (after specifying desired packages inside) 
+pip install -r requirements.txt 
 
 ## Create .env file to specify sales tax rate
 
