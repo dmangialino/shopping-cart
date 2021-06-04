@@ -8,7 +8,6 @@ Clone this repository to your local machine. Then, using the command line, navig
 Use Anaconda to create and activate a new virtual environment, perhaps called "shopping-env"
 
 conda create -n shopping-env python=3.8
-
 conda activate shopping-env
 
 
