@@ -24,6 +24,7 @@ products = [
     {"id":21, "name": "Bananas", "department": "fruit and vegetable", "aisle": "fruit", "price": 0.79, "price_per": "pound"},
     {"id":22, "name": "Apples", "department": "fruit and vegetable", "aisle": "fruit", "price": 1.29, "price_per": "pound"}
 ] # based on data from Instacart: https://www.instacart.com/datasets/grocery-shopping-2017
+# Bananas and apples (IDs 21 and 22) were added as part of the "Handling Pricing per Pound" further exploration challenge
 
 # Program utilizes to_usd function provided by Professor Rossetti to convert values to USD format
 def to_usd(my_price):
@@ -38,9 +39,13 @@ def to_usd(my_price):
     """
     return f"${my_price:,.2f}" #> $12,000.71
 
-# Import os to get tax rate from .env file
+# Import os to read variables from .env file
+# Import from sendgrid to enable emailing
 import os
 from dotenv import load_dotenv
+from sendgrid import SendGridAPIClient
+from sendgrid.helpers.mail import Mail
+
 load_dotenv()
 
 # Get tax rate from .env file
@@ -97,6 +102,22 @@ while True:
             print("Are you sure that product identifier is correct? Please try again!")     
 
 
+# Ask user if they want an email receipt
+while True:
+    email_receipt = input("Would you like your receipt via email? Please enter 'y' for yes or 'n' for no: ")
+    email_address = ""
+    if(email_receipt == "y"):
+        # Prompt user to provide email address to which the receipt will be sent
+        email_address = input("Please enter the email address to which you would like the receipt to be sent: ")
+        print("Ok, we will send an email receipt to ", email_address)
+        break
+    elif(email_receipt == "n"):
+        print("Ok, we will not send a receipt via email.")
+        break
+    else:
+        print("We're sorry, that input was invalid. Please try again!")
+
+
 # Print top portion of receipt, including timestamp (date and time)
 print("---------------------------------")
 print("GREEN FOODS GROCERY")
@@ -110,6 +131,7 @@ print("SELECTED PRODUCTS:")
 # Perform product lookups to determine each product's name and price
 subtotal = 0
 counter = 0
+html_list_items = []
 for id in selected_ids:
     # Display the selected product's name and price
     matching_products = [p for p in products if str(p["id"]) == str(id)]
@@ -124,6 +146,15 @@ for id in selected_ids:
         subtotal += float(matching_product["price"])
         price = to_usd(matching_product["price"])
     print(" ...", matching_product["name"], f"({price})")
+    html_list_items.append(f'{matching_product["name"]}, ({price})')
+
+#print("---------------------------------")
+#print("---------------------------------")
+#print("---------------------------------")
+#print(type(html_list_items))
+#print("---------------------------------")
+#print("---------------------------------")
+#print("---------------------------------")
 
 # Print subtotal
 print("---------------------------------")
@@ -135,8 +166,58 @@ print("SUBTOTAL:", subtotal_usd)
 tax = subtotal * float(TAX_RATE)
 print("TAX:", to_usd(tax))
 print("TOTAL:", to_usd(subtotal+tax))
+print("---------------------------------")
+
+
+# Send email receipt
+# Modified based on code provided by Professor Rossetti (link below)
+# https://github.com/prof-rossetti/intro-to-python/blob/main/notes/python/packages/sendgrid.md
+print("---------------------------------")
+print("---------------------------------")
+print("---------------------------------")
+
+SENDGRID_API_KEY = os.getenv("SENDGRID_API_KEY", default="OOPS, please set env var called 'SENDGRID_API_KEY'")
+SENDER_ADDRESS = os.getenv("SENDER_ADDRESS", default="OOPS, please set env var called 'SENDER_ADDRESS'")
+
+client = SendGridAPIClient(SENDGRID_API_KEY) #> <class 'sendgrid.sendgrid.SendGridAPIClient>
+#print("CLIENT:", type(client))
+
+subject = "Your Receipt from the Green Grocery Store"
+
+html_content = f"""
+<h3>Hello this is your receipt</h3>
+<ol>
+    {html_list_items}
+</ol>
+"""
+
+#print("---------------------------------")
+#print("---------------------------------")
+#print(html_content)
+#print("---------------------------------")
+#print("---------------------------------")
+
+#print("HTML:", html_content)
+
+message = Mail(from_email=SENDER_ADDRESS, to_emails=email_address, subject=subject, html_content=html_content)
+
+try:
+    response = client.send(message)
+
+    #print("RESPONSE:", type(response)) #> <class 'python_http_client.client.Response'>
+    if(response.status_code == 202):
+        print("Email receipt sent successfully!")
+    #print(response.status_code) #> 202 indicates SUCCESS
+    #print(response.body)
+    #print(response.headers)
+
+except Exception as err:
+    print(type(err))
+    print(err)
+
 
 # Display thank you message to user
 print("---------------------------------")
-print("THANK YOU! SEE YOU AGAIN SOON!")
+print("Thank you! See you again soon!")
 print("---------------------------------")
+

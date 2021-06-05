@@ -1,4 +1,7 @@
 # This is the requirements.txt file
 
-# The below is required to read contents of the .env file
+# To read contents of the .env file
 python-dotenv
+
+# Sendgrid for emailing capabilities 
+sendgrid==6.6.0
