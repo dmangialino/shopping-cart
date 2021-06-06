@@ -24,7 +24,7 @@ products = [
     {"id":20, "name": "Pomegranate Cranberry & Aloe Vera Enrich Drink", "department": "beverages", "aisle": "juice nectars", "price": 4.25, "price_per": "item"},
     {"id":21, "name": "Bananas", "department": "fruit and vegetable", "aisle": "fruit", "price": 0.79, "price_per": "pound"},
     {"id":22, "name": "Apples", "department": "fruit and vegetable", "aisle": "fruit", "price": 1.29, "price_per": "pound"},
-    {"id":23, "name": "Sliced Turkey", "department": "deli", "aisle": "poultry counter", "price": 3.00, "price_per": "pound"}
+    {"id":23, "name": "Sliced Turkey", "department": "deli", "aisle": "poultry counter", "price": 6.99, "price_per": "pound"}
 ] # based on data from Instacart: https://www.instacart.com/datasets/grocery-shopping-2017
 
 # Program utilizes to_usd function provided by Professor Rossetti to convert values to USD format
@@ -102,6 +102,8 @@ while True:
                     selected_ids.append(selected_id)
                 except ValueError:
                     print("Oops! That was not a valid number. Please re-enter the product identifier to try again.")
+            else:
+                selected_ids.append(selected_id)
         # If it is not valid, print "Are you sure that product identifier is correct? Please try again!" 
         # and return to beginning of while loop
         else:
