@@ -1,5 +1,6 @@
 # shopping_cart.py
 
+# Bananas and apples (IDs 21 and 22) were added as part of the "Handling Pricing per Pound" further exploration challenge
 products = [
     {"id":1, "name": "Chocolate Sandwich Cookies", "department": "snacks", "aisle": "cookies cakes", "price": 3.50, "price_per": "item"},
     {"id":2, "name": "All-Seasons Salt", "department": "pantry", "aisle": "spices seasonings", "price": 4.99, "price_per": "item"},
@@ -22,9 +23,9 @@ products = [
     {"id":19, "name": "Gluten Free Quinoa Three Cheese & Mushroom Blend", "department": "dry goods pasta", "aisle": "grains rice dried goods", "price": 3.99, "price_per": "item"},
     {"id":20, "name": "Pomegranate Cranberry & Aloe Vera Enrich Drink", "department": "beverages", "aisle": "juice nectars", "price": 4.25, "price_per": "item"},
     {"id":21, "name": "Bananas", "department": "fruit and vegetable", "aisle": "fruit", "price": 0.79, "price_per": "pound"},
-    {"id":22, "name": "Apples", "department": "fruit and vegetable", "aisle": "fruit", "price": 1.29, "price_per": "pound"}
+    {"id":22, "name": "Apples", "department": "fruit and vegetable", "aisle": "fruit", "price": 1.29, "price_per": "pound"},
+    {"id":23, "name": "Sliced Turkey", "department": "deli", "aisle": "poultry counter", "price": 3.00, "price_per": "pound"}
 ] # based on data from Instacart: https://www.instacart.com/datasets/grocery-shopping-2017
-# Bananas and apples (IDs 21 and 22) were added as part of the "Handling Pricing per Pound" further exploration challenge
 
 # Program utilizes to_usd function provided by Professor Rossetti to convert values to USD format
 def to_usd(my_price):
@@ -40,7 +41,7 @@ def to_usd(my_price):
     return f"${my_price:,.2f}" #> $12,000.71
 
 # Import os to read variables from .env file
-# Import from sendgrid to enable emailing
+# Import requirements for sendgrid to enable emailing receipts
 import os
 from dotenv import load_dotenv
 from sendgrid import SendGridAPIClient
@@ -92,10 +93,15 @@ while True:
         # Verify that the product ID is valid
         if(selected_id in valid_ids):
             if(selected_id in price_per_pound):
-                lbs = input("How many pounds? ")
-                pounds.append(lbs)
-            # If valid, append to the selected_ids list
-            selected_ids.append(selected_id)
+                # Error handling to ensure input provided by user is a valid number
+                # Utilized Python documentation for error handling code (https://docs.python.org/3/tutorial/errors.html)
+                try:
+                    lbs = float(input("How many pounds? "))
+                    pounds.append(float(lbs))
+                    # If valid, append to the selected_ids list
+                    selected_ids.append(selected_id)
+                except ValueError:
+                    print("Oops! That was not a valid number. Please re-enter the product identifier to try again.")
         # If it is not valid, print "Are you sure that product identifier is correct? Please try again!" 
         # and return to beginning of while loop
         else:
@@ -139,7 +145,9 @@ for id in selected_ids:
     
     if(matching_product["price_per"] == "pound"):
         #print("THIS PRODUCT IS PRICED PER POUND!")
-        subtotal += (float(matching_product["price"]) * float(pounds[counter]))
+        print("COUNTER:", counter)
+        print("POUNDS[COUNTER]:", pounds[counter])
+        subtotal += float(matching_product["price"]) * pounds[counter]
         price = to_usd(float(matching_product["price"]) * float(pounds[counter]))
         counter = counter + 1
     else:
@@ -155,7 +163,7 @@ subtotal_usd = to_usd(subtotal)
 print("SUBTOTAL:", subtotal_usd)
 
 # Print tax and total with tax (sum of subtotal and tax) using tax rate specified in .env file
-# Need to convert TAX_RATE from .env file from str to float before performing multiplication with subtotal (an integer)
+# Need to convert TAX_RATE from .env file from str to float before performing multiplication with subtotal
 tax = subtotal * float(TAX_RATE)
 print("TAX:", to_usd(tax))
 print("TOTAL:", to_usd(subtotal+tax))
@@ -163,12 +171,8 @@ print("---------------------------------")
 
 
 # Send email receipt
-# Modified based on code provided by Professor Rossetti (link below)
+# Modified code provided by Professor Rossetti (link below)
 # https://github.com/prof-rossetti/intro-to-python/blob/main/notes/python/packages/sendgrid.md
-print("---------------------------------")
-print("---------------------------------")
-print("---------------------------------")
-
 SENDGRID_API_KEY = os.getenv("SENDGRID_API_KEY", default="OOPS, please set env var called 'SENDGRID_API_KEY'")
 SENDER_ADDRESS = os.getenv("SENDER_ADDRESS", default="OOPS, please set env var called 'SENDER_ADDRESS'")
 
@@ -179,28 +183,20 @@ subject = "Your Receipt from the Green Grocery Store"
 
 html_content = f"""
 <h3>Your Receipt from the Green Grocery Store</h3>
-<p>---------------------------------</p>
-<p>GREEN FOODS GROCERY</p>
 <p>WWW.GREEN-FOODS-GROCERY.COM</p>
-<p>---------------------------------</p>
-<p>Checkout at: {timestampStr}</p>
-<p>Subtotal: {subtotal_usd}</p>
-<p>Tax: {to_usd(tax)}</p>
-<p>Total: {to_usd(subtotal+tax)}</p>
-<p>---------------------------------</p>
-<p>Items Purchased:</p>
+<p>------------------------------------------------</p>
+<p>CHECKOUT AT: {timestampStr}</p>
+<p>------------------------------------------------</p>
+<p>ITEMS PURCHASED:</p>
 <ol>
     {html_list_items}
 </ol>
+<p>------------------------------------------------</p>
+<p>SUBTOTAL: {subtotal_usd}</p>
+<p>TAX: {to_usd(tax)}</p>
+<p>TOTAL: {to_usd(subtotal+tax)}</p>
 """
 
-#print("---------------------------------")
-#print("---------------------------------")
-#print(html_content)
-#print("---------------------------------")
-#print("---------------------------------")
-
-#print("HTML:", html_content)
 
 message = Mail(from_email=SENDER_ADDRESS, to_emails=email_address, subject=subject, html_content=html_content)
 
@@ -215,8 +211,9 @@ try:
     #print(response.headers)
 
 except Exception as err:
-    print(type(err))
-    print(err)
+    print("No email receipt sent.")
+    #print(type(err))
+    #print(err)
 
 
 # Display thank you message to user
