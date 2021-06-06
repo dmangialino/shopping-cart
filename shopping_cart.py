@@ -148,13 +148,6 @@ for id in selected_ids:
     print(" ...", matching_product["name"], f"({price})")
     html_list_items.append(f'{matching_product["name"]}, ({price})')
 
-#print("---------------------------------")
-#print("---------------------------------")
-#print("---------------------------------")
-#print(type(html_list_items))
-#print("---------------------------------")
-#print("---------------------------------")
-#print("---------------------------------")
 
 # Print subtotal
 print("---------------------------------")
@@ -185,7 +178,17 @@ client = SendGridAPIClient(SENDGRID_API_KEY) #> <class 'sendgrid.sendgrid.SendGr
 subject = "Your Receipt from the Green Grocery Store"
 
 html_content = f"""
-<h3>Hello this is your receipt</h3>
+<h3>Your Receipt from the Green Grocery Store</h3>
+<p>---------------------------------</p>
+<p>GREEN FOODS GROCERY</p>
+<p>WWW.GREEN-FOODS-GROCERY.COM</p>
+<p>---------------------------------</p>
+<p>Checkout at: {timestampStr}</p>
+<p>Subtotal: {subtotal_usd}</p>
+<p>Tax: {to_usd(tax)}</p>
+<p>Total: {to_usd(subtotal+tax)}</p>
+<p>---------------------------------</p>
+<p>Items Purchased:</p>
 <ol>
     {html_list_items}
 </ol>
