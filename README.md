@@ -7,7 +7,7 @@ Clone this repository to your local machine. Then, using the command line, navig
 ## Setup
 Use Anaconda to create and activate a new virtual environment, perhaps called "shopping-env"
 
-conda create -n shopping-env python=3.8
+conda create -n shopping-env python=3.8  
 conda activate shopping-env
 
 After activating the virtual environment, run the below to install packages dependencies (identified in the requirements.txt file):
@@ -25,9 +25,9 @@ TAX_RATE = .0875
 
 In addition, the below variables must be specified to use the email receipt functionality:
 
-SENDGRID_API_KEY
-SENDER_ADDRESS
-SENDGRID_TEMPLATE_ID
+SENDGRID_API_KEY  
+SENDER_ADDRESS  
+SENDGRID_TEMPLATE_ID  
 
 
 ## Run the App

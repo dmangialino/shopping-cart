@@ -42,6 +42,7 @@ def to_usd(my_price):
 
 # Import os to read variables from .env file
 # Import requirements for sendgrid to enable emailing receipts
+import json
 import os
 from dotenv import load_dotenv
 from sendgrid import SendGridAPIClient
@@ -108,7 +109,7 @@ while True:
         # and return to beginning of while loop
         else:
             print("Are you sure that product identifier is correct? Please try again!")     
-
+print("---------------------------------")
 
 # Ask user if they want an email receipt
 while True:
@@ -167,8 +168,11 @@ print("SUBTOTAL:", subtotal_usd)
 # Print tax and total with tax (sum of subtotal and tax) using tax rate specified in .env file
 # Need to convert TAX_RATE from .env file from str to float before performing multiplication with subtotal
 tax = subtotal * float(TAX_RATE)
-print("TAX:", to_usd(tax))
-print("TOTAL:", to_usd(subtotal+tax))
+tax_usd = to_usd(tax)
+print("TAX:", tax_usd)
+
+total_usd = to_usd(subtotal+tax)
+print("TOTAL:", total_usd)
 print("---------------------------------")
 
 
@@ -176,31 +180,50 @@ print("---------------------------------")
 # Modified code provided by Professor Rossetti (link below)
 # https://github.com/prof-rossetti/intro-to-python/blob/main/notes/python/packages/sendgrid.md
 SENDGRID_API_KEY = os.getenv("SENDGRID_API_KEY", default="OOPS, please set env var called 'SENDGRID_API_KEY'")
+SENDGRID_TEMPLATE_ID = os.getenv("SENDGRID_TEMPLATE_ID", default="OOPS, please set env var called 'SENDGRID_TEMPLATE_ID'")
 SENDER_ADDRESS = os.getenv("SENDER_ADDRESS", default="OOPS, please set env var called 'SENDER_ADDRESS'")
+
+#for item in html_list_items:
+#    print(item)
+
+items_list = json.dumps(html_list_items)
+
+template_data = {
+    "subtotal_usd": subtotal_usd,
+    "tax_usd": tax_usd,
+    "total_price_usd": total_usd,
+    "human_friendly_timestamp": timestampStr,
+    "products": items_list
+}
 
 client = SendGridAPIClient(SENDGRID_API_KEY) #> <class 'sendgrid.sendgrid.SendGridAPIClient>
 #print("CLIENT:", type(client))
 
-subject = "Your Receipt from the Green Grocery Store"
+message = Mail(from_email=SENDER_ADDRESS, to_emails=email_address)
+message.template_id = SENDGRID_TEMPLATE_ID
+message.dynamic_template_data = template_data
+#print("MESSAGE:", type(message))
 
-html_content = f"""
-<h3>Your Receipt from the Green Grocery Store</h3>
-<p>WWW.GREEN-FOODS-GROCERY.COM</p>
-<p>------------------------------------------------</p>
-<p>CHECKOUT AT: {timestampStr}</p>
-<p>------------------------------------------------</p>
-<p>ITEMS PURCHASED:</p>
-<ol>
-    {html_list_items}
-</ol>
-<p>------------------------------------------------</p>
-<p>SUBTOTAL: {subtotal_usd}</p>
-<p>TAX: {to_usd(tax)}</p>
-<p>TOTAL: {to_usd(subtotal+tax)}</p>
-"""
+#subject = "Your Receipt from the Green Grocery Store"
+
+#html_content = f"""
+#<h3>Your Receipt from the Green Grocery Store</h3>
+#<p>WWW.GREEN-FOODS-GROCERY.COM</p>
+#<p>------------------------------------------------</p>
+#<p>CHECKOUT AT: {timestampStr}</p>
+#<p>------------------------------------------------</p>
+#<p>ITEMS PURCHASED:</p>
+#<ol>
+#    {html_list_items}
+#</ol>
+#<p>------------------------------------------------</p>
+#<p>SUBTOTAL: {subtotal_usd}</p>
+#<p>TAX: {to_usd(tax)}</p>
+#<p>TOTAL: {to_usd(subtotal+tax)}</p>
+#"""
 
 
-message = Mail(from_email=SENDER_ADDRESS, to_emails=email_address, subject=subject, html_content=html_content)
+#message = Mail(from_email=SENDER_ADDRESS, to_emails=email_address, subject=subject, html_content=html_content)
 
 try:
     response = client.send(message)
