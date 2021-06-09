@@ -19,16 +19,27 @@ pip install -r requirements.txt
 
 After activating the environment and installing the required packages, create a .env file to specify environment variable values to be used by the program. To do so, navigate to the root directory of the local repository and create a new file called ".env"
 
+We will configure three variables in the .env file (TAX_RATE, SENDGRID_API_KEY, and SENDER_ADDRESS), as outlined in the following two sections.
+
+### Configure Tax Rate
+
 In the file, copy the below for the "TAX_RATE" environemtn variable. Provide the value of the sales tax rate where .0875 appears in the below (i.e., if you wish to use a sales tax rate other than 8.75%, replace the .0875 with the desired value).
 
 TAX_RATE = .0875
 
-In addition, the below variables must be specified to use the email receipt functionality:
+### Configure SendGrid account and variables
 
-SENDGRID_API_KEY  
-SENDER_ADDRESS  
-SENDGRID_TEMPLATE_ID  
+To enable email receipts, first sign up for a SendGrid account using the following link: https://signup.sendgrid.com/
 
+Then, follow the instructions to complete the "Single Sender Verification" by clicking the link in a confirmation email sent to the email you provided to verify your account.
+
+Next, create a SendGrid API key using the link below. Be sure to select "full access" permissions:
+
+https://app.sendgrid.com/settings/api_keys
+
+Once the API key is generated, copy the value and store it in an environment variable in the .env file called "SENDGRID_API_KEY"
+
+Lastly, crate a "SENDER_ADDRESS" variable in the .env file and specify the sender address for the program to utilize. Be sure this is the same email address as the single sender address associated with the SendGrid account you created.
 
 ## Run the App
 To run the application, run the below command on the command line:
