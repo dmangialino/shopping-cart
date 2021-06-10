@@ -14,6 +14,7 @@ After activating the virtual environment, run the below to install packages depe
 
 pip install -r requirements.txt 
 
+This program utilizes the "products.csv" file for the grocery store's product inventory. When cloning the repository, be sure to include the "products.csv" file in the root directory.
 
 ## Create .env file
 
@@ -25,7 +26,7 @@ We will configure three variables in the .env file (`TAX_RATE`, `SENDGRID_API_KE
 
 In the file, copy the below for the `TAX_RATE` environment variable. Provide the value of the sales tax rate where .0875 appears in the below (i.e., if you wish to use a sales tax rate other than 8.75%, replace the .0875 with the desired value).
 
-TAX_RATE = .0875
+`TAX_RATE` = .0875
 
 ### Configure SendGrid account and variables
 
