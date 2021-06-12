@@ -1,31 +1,5 @@
 # shopping_cart.py
 
-#products = [
-#    {"id":1, "name": "Chocolate Sandwich Cookies", "department": "snacks", "aisle": "cookies cakes", "price": 3.50, "price_per": "item"},
-#    {"id":2, "name": "All-Seasons Salt", "department": "pantry", "aisle": "spices seasonings", "price": 4.99, "price_per": "item"},
-#    {"id":3, "name": "Robust Golden Unsweetened Oolong Tea", "department": "beverages", "aisle": "tea", "price": 2.49, "price_per": "item"},
-#    {"id":4, "name": "Smart Ones Classic Favorites Mini Rigatoni With Vodka Cream Sauce", "department": "frozen", "aisle": "frozen meals", "price": 6.99, "price_per": "item"},
-#    {"id":5, "name": "Green Chile Anytime Sauce", "department": "pantry", "aisle": "marinades meat preparation", "price": 7.99, "price_per": "item"},
-#    {"id":6, "name": "Dry Nose Oil", "department": "personal care", "aisle": "cold flu allergy", "price": 21.99, "price_per": "item"},
-#    {"id":7, "name": "Pure Coconut Water With Orange", "department": "beverages", "aisle": "juice nectars", "price": 3.50, "price_per": "item"},
-#    {"id":8, "name": "Cut Russet Potatoes Steam N' Mash", "department": "frozen", "aisle": "frozen produce", "price": 4.25, "price_per": "item"},
-#    {"id":9, "name": "Light Strawberry Blueberry Yogurt", "department": "dairy eggs", "aisle": "yogurt", "price": 6.50, "price_per": "item"},
-#    {"id":10, "name": "Sparkling Orange Juice & Prickly Pear Beverage", "department": "beverages", "aisle": "water seltzer sparkling water", "price": 2.99, "price_per": "item"},
-#    {"id":11, "name": "Peach Mango Juice", "department": "beverages", "aisle": "refrigerated", "price": 1.99, "price_per": "item"},
-#    {"id":12, "name": "Chocolate Fudge Layer Cake", "department": "frozen", "aisle": "frozen dessert", "price": 18.50, "price_per": "item"},
-#    {"id":13, "name": "Saline Nasal Mist", "department": "personal care", "aisle": "cold flu allergy", "price": 16.00, "price_per": "item"},
-#    {"id":14, "name": "Fresh Scent Dishwasher Cleaner", "department": "household", "aisle": "dish detergents", "price": 4.99, "price_per": "item"},
-#    {"id":15, "name": "Overnight Diapers Size 6", "department": "babies", "aisle": "diapers wipes", "price": 25.50, "price_per": "item"},
-#    {"id":16, "name": "Mint Chocolate Flavored Syrup", "department": "snacks", "aisle": "ice cream toppings", "price": 4.50, "price_per": "item"},
-#    {"id":17, "name": "Rendered Duck Fat", "department": "meat seafood", "aisle": "poultry counter", "price": 9.99, "price_per": "item"},
-#    {"id":18, "name": "Pizza for One Suprema Frozen Pizza", "department": "frozen", "aisle": "frozen pizza", "price": 12.50, "price_per": "item"},
-#    {"id":19, "name": "Gluten Free Quinoa Three Cheese & Mushroom Blend", "department": "dry goods pasta", "aisle": "grains rice dried goods", "price": 3.99, "price_per": "item"},
-#    {"id":20, "name": "Pomegranate Cranberry & Aloe Vera Enrich Drink", "department": "beverages", "aisle": "juice nectars", "price": 4.25, "price_per": "item"},
-#    {"id":21, "name": "Bananas", "department": "fruit and vegetable", "aisle": "fruit", "price": 0.79, "price_per": "pound"},
-#    {"id":22, "name": "Apples", "department": "fruit and vegetable", "aisle": "fruit", "price": 1.29, "price_per": "pound"},
-#    {"id":23, "name": "Sliced Turkey", "department": "deli", "aisle": "poultry counter", "price": 6.99, "price_per": "pound"}
-#] # based on data from Instacart: https://www.instacart.com/datasets/grocery-shopping-2017
-
 # Program utilizes to_usd function provided by Professor Rossetti to convert values to USD format
 def to_usd(my_price):
     """
@@ -40,6 +14,7 @@ def to_usd(my_price):
     return f"${my_price:,.2f}" #> $12,000.71
 
 # Import os to read variables from .env file
+# Import read_csv from pandas to process CSV
 # Import requirements for sendgrid to enable emailing receipts
 import os
 from dotenv import load_dotenv
@@ -53,19 +28,18 @@ load_dotenv()
 TAX_RATE = os.getenv("TAX_RATE", default="0.0875")
 
 # Capture date and time at beginning of checkout process
-# Code for date and time found on thispointer.com and Stack Overflow for AM/PM (links below)
+# Code for date and time adopted from thispointer.com and Stack Overflow for AM/PM (links below)
 # https://thispointer.com/python-how-to-get-current-date-and-time-or-timestamp/
 # https://stackoverflow.com/questions/1759455/how-can-i-account-for-period-am-pm-using-strftime
 from datetime import datetime
 timestamp = datetime.now()
 timestampStr = timestamp.strftime("%b-%d-%Y %I:%M %p")
 
-# Read products.csv file to create DataFrame
+# Read products.csv file to create DataFrame and convert to Python dictionary
 csv_filepath = "products.csv"
 products_df = read_csv(csv_filepath)
 
 products = products_df.to_dict("records")
-
 
 # Create list of valid IDs against which to compare user input
 # When creating list, covert values from int to str to enable comparison with user input
@@ -80,7 +54,7 @@ for identifier in products:
         price_per_pound.append(str(identifier["id"]))
 
 # Welcome user and provide instructions on how to use the app
-print("Hello, welcome to Green Foods Grocery's cehckout application!")
+print("Hello, welcome to Ollie's Grocery's checkout application!")
 print("---------------------------------")
 print("You will be prompted to enter the product identifiers for each product.")
 print("When you are done entering all product identifiers, enter 'DONE'.")
@@ -110,8 +84,7 @@ while True:
                     print("Oops! That was not a valid number. Please re-enter the product identifier to try again.")
             else:
                 selected_ids.append(selected_id)
-        # If it is not valid, print "Are you sure that product identifier is correct? Please try again!" 
-        # and return to beginning of while loop
+        # If it is not valid, print error message and return to beginning of while loop
         else:
             print("Are you sure that product identifier is correct? Please try again!")     
 print("---------------------------------")
@@ -131,12 +104,12 @@ while True:
     else:
         print("We're sorry, that input was invalid. Please try again!")
 
-
 # Print top portion of receipt, including timestamp (date and time)
 print("---------------------------------")
-print("GREEN FOODS GROCERY")
-print("WWW.GREEN-FOODS-GROCERY.COM")
+print("OLLIE'S GROCERY")
+print("WWW.OLLIES-GROCERY.COM")
 print("---------------------------------")
+
 # Print timestamp (date and time) of checkout
 print("CHECKOUT AT:", timestampStr)
 print("---------------------------------")
@@ -152,9 +125,6 @@ for id in selected_ids:
     matching_product = matching_products[0]
     
     if(matching_product["price_per"] == "pound"):
-        #print("THIS PRODUCT IS PRICED PER POUND!")
-        #print("COUNTER:", counter)
-        #print("POUNDS[COUNTER]:", pounds[counter])
         subtotal += float(matching_product["price"]) * pounds[counter]
         price = to_usd(float(matching_product["price"]) * float(pounds[counter]))
         counter = counter + 1
@@ -180,23 +150,20 @@ total_usd = to_usd(subtotal+tax)
 print("TOTAL:", total_usd)
 print("---------------------------------")
 
-
 # Send email receipt
 # Modified code provided by Professor Rossetti (link below)
 # https://github.com/prof-rossetti/intro-to-python/blob/main/notes/python/packages/sendgrid.md
 SENDGRID_API_KEY = os.getenv("SENDGRID_API_KEY", default="OOPS, please set env var called 'SENDGRID_API_KEY'")
 SENDER_ADDRESS = os.getenv("SENDER_ADDRESS", default="OOPS, please set env var called 'SENDER_ADDRESS'")
 
-#for item in html_list_items:
-#    print(item)
 
-client = SendGridAPIClient(SENDGRID_API_KEY) #> <class 'sendgrid.sendgrid.SendGridAPIClient>
+client = SendGridAPIClient(SENDGRID_API_KEY)
 
-subject = "Your Receipt from the Green Grocery Store"
+subject = "Your Receipt from Ollie's Grocery"
 
 html_content = f"""
-<h3>Your Receipt from the Green Grocery Store</h3>
-<p>WWW.GREEN-FOODS-GROCERY.COM</p>
+<h3>Your Receipt from Ollie's Grocery</h3>
+<p>WWW.OLLIES-GROCERY.COM</p>
 <p>------------------------------------------------</p>
 <p>CHECKOUT AT: {timestampStr}</p>
 <p>------------------------------------------------</p>
@@ -215,17 +182,11 @@ message = Mail(from_email=SENDER_ADDRESS, to_emails=email_address, subject=subje
 try:
     response = client.send(message)
 
-    #print("RESPONSE:", type(response)) #> <class 'python_http_client.client.Response'>
     if(response.status_code == 202):
         print("Email receipt sent successfully!")
-    #print(response.status_code) #> 202 indicates SUCCESS
-    #print(response.body)
-    #print(response.headers)
 
 except Exception as err:
     print("No email receipt sent.")
-    #print(type(err))
-    #print(err)
 
 
 # Display thank you message to user

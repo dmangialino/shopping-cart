@@ -27,19 +27,17 @@ In the file, copy the below for the `TAX_RATE` environment variable. Provide the
 
 `TAX_RATE` = .0875
 
-### Configure SendGrid account and variables
+### Configure SendGrid Account and Variables
 
 To enable email receipts, first sign up for a SendGrid account using the following link: https://signup.sendgrid.com/
 
 Then, follow the instructions to complete the "Single Sender Verification" by clicking the link in a confirmation email sent to the email you provided to verify your account.
 
-Next, create a SendGrid API key using the link below. Be sure to select "full access" permissions:
-
-https://app.sendgrid.com/settings/api_keys
+Next, create a SendGrid API key using the following link. Be sure to select "full access" permissions: https://app.sendgrid.com/settings/api_keys
 
 Once the API key is generated, copy the value and store it in an environment variable in the .env file called `SENDGRID_API_KEY`.
 
-Lastly, crate a `SENDER_ADDRESS` variable in the .env file and specify the sender address for the program to utilize. Be sure this is the same email address as the single sender address associated with the SendGrid account you created.
+Lastly, add a a `SENDER_ADDRESS` variable to the .env file and specify the sender address for the program to utilize. Be sure to use the same email address as the single sender address associated with the SendGrid account you created.
 
 ## Run the App
 To run the application, run the below command on the command line:
