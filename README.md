@@ -1,7 +1,9 @@
 # shopping-cart
 
 ## Installation
-Clone this repository to your local machine. This program utilizes the "products.csv" file for the grocery store's product inventory. When cloning the repository, be sure to include the "products.csv" file in the root directory.
+Clone this repository to your local machine. This program utilizes the "products.csv" file for the grocery store's product inventory. 
+
+Be sure to also make a copy of the "products.csv" file and save it in the root directory.
 
 Then, using the command line, navigate to the root folder of the repository.
 
