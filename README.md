@@ -8,12 +8,16 @@ Then, using the command line, navigate to the root folder of the repository.
 ## Setup
 Use Anaconda to create and activate a new virtual environment, perhaps called "shopping-env"
 
+```sh
 conda create -n shopping-env python=3.8  
 conda activate shopping-env
+```
 
 After activating the virtual environment, run the below to install packages dependencies (identified in the requirements.txt file):
 
+```sh
 pip install -r requirements.txt 
+```
 
 ## Create .env file
 
@@ -42,4 +46,6 @@ Lastly, add a a `SENDER_ADDRESS` variable to the .env file and specify the sende
 ## Run the App
 To run the application, run the below command on the command line:
 
+```sh
 python shopping_cart.py
+```
