@@ -31,7 +31,9 @@ We will configure three variables in the .env file (`TAX_RATE`, `SENDGRID_API_KE
 
 In the file, copy the below for the `TAX_RATE` environment variable. Provide the value of the sales tax rate where .0875 appears in the below (i.e., if you wish to use a sales tax rate other than 8.75%, replace the .0875 with the desired value).
 
+```sh
 `TAX_RATE` = .0875
+```
 
 ### Configure SendGrid Account and Variables
 
